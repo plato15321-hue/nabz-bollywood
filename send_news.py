@@ -23,7 +23,8 @@ async def get_news():
                         t = item.find("title")
                         d = item.find("description")
                         if t and d:
-                            news.append({"title": t.text.strip(), "desc": d.text.strip()[:500]})
+                           clean = BeautifulSoup(d.text, "html.parser").get_text()
+news.append({"title": t.text.strip(), "desc": clean.strip()[:500]})
         except Exception as e:
             print("BH error:", e)
         try:
