@@ -1,4 +1,3 @@
-cat > /mnt/user-data/outputs/send_news.py << 'EOF'
 import os
 import asyncio
 import aiohttp
@@ -100,5 +99,3 @@ async def main():
             print("Send error:", e)
 
 asyncio.run(main())
-EOF
-echo "Done"
