@@ -3,30 +3,11 @@ import asyncio
 import aiohttp
 from bs4 import BeautifulSoup
 from telegram import Bot
-from deep_translator import GoogleTranslator
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 CHANNEL_ID = "@nabz_bollywood"
 
 print("BOT_TOKEN:", "OK" if BOT_TOKEN else "MISSING")
-
-def translate(text):
-    try:
-        translated = GoogleTranslator(source='en', target='fa').translate(text[:4500])
-        print("Translate: OK")
-        return translated
-    except Exception as e:
-        print("Translate error:", e)
-        return text
-
-def add_hashtags(text, title):
-    words = title.split()
-    hashtags = []
-    for word in words:
-        if len(word) > 3:
-            hashtags.append("#" + word.replace("'","").replace(",",""))
-    hashtags += ["#بالیوود", "#Bollywood", "#سینمای_هند", "#اخبار_بالیوود"]
-    return text + "\n\n" + " ".join(hashtags[:10])
 
 async def get_news():
     news = []
@@ -75,22 +56,12 @@ async def main():
     except Exception as e:
         print("Channel error:", e)
         return
-
     news = await get_news()
-
     if not news:
-        print("No news - sending test")
-        await bot.send_message(
-            chat_id=CHANNEL_ID,
-            text="🎬 نبض بالیوود\n\nربات فعاله!\n\n#بالیوود #Bollywood"
-        )
+        await bot.send_message(chat_id=CHANNEL_ID, text="🎬 نبض بالیوود\n\nربات فعاله!\n\n#بالیوود #Bollywood")
         return
-
     for item in news[:3]:
-        title_fa = translate(item["title"])
-        desc_fa = translate(item["desc"])
-        msg = f"🎬 {title_fa}\n({item['title']})\n\n{desc_fa}"
-        msg = add_hashtags(msg, item["title"])
+        msg = f"🎬 {item['title']}\n\n{item['desc']}\n\n#بالیوود #Bollywood #سینمای_هند #اخبار_بالیوود"
         try:
             await bot.send_message(chat_id=CHANNEL_ID, text=msg[:4096])
             print("Sent:", item["title"][:40])
@@ -99,3 +70,5 @@ async def main():
             print("Send error:", e)
 
 asyncio.run(main())
+
+
