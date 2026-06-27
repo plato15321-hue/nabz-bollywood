@@ -13,7 +13,7 @@ print("BOT_TOKEN:", "OK" if BOT_TOKEN else "MISSING")
 print("GEMINI_API_KEY:", "OK" if GEMINI_API_KEY else "MISSING")
 
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-1.5-flash-latest")
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 async def translate(text):
     try:
